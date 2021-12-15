@@ -9,6 +9,10 @@ html {
 body {
     font-family: v.$fuente_principal;
     font-size: 1.6rem;
+
+    &.fijar-body {
+        overflow: hidden;
+    }
 }
 p{
     font-size: 2rem;
@@ -37,5 +41,7 @@ h3 {
 }
 img {
     max-width: 100%;
+    width: 100%;
+    height: auto; //estos dos valores contrarrestan el W/H que le dimos a la etiqueta html de img
     display: block;
 }
