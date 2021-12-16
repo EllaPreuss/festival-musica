@@ -3,6 +3,10 @@ const { src, dest, watch, parallel } = require('gulp');
 //CSS
 const sass = require('gulp-sass')(require('sass'));
 const plumber = require('gulp-plumber');
+const autoprefixer = require('autoprefixer');
+const cssnano = require('cssnano');
+const postcss = require('gulp-postcss');
+const sourcemaps = require('gulp-sourcemaps');
 
 //Imágenes
 const cache = require('gulp-cache');
@@ -10,11 +14,17 @@ const webp = require('gulp-webp');
 const imagemin = require('gulp-imagemin');
 const avif = require('gulp-avif');
 
+//JavaScript
+const terser = require('gulp-terser-js');
+
 function css(done) {
     //Identificar el archivo .SCSS a compilar
     src('src/scss/**/*.scss')//manda a identificar el (archivo), 
+        .pipe( sourcemaps.init() )
         .pipe( plumber() )
         .pipe( sass() ) //y una vez que finaliza, con pipe manda a llamar a la sig acción --Compilarlo
+        .pipe( postcss([ autoprefixer(), cssnano() ]) )
+        .pipe( sourcemaps.write('.') )
         .pipe( dest('build/css') )  //Almacenarlo en el disco duro
     done();
 }
@@ -53,6 +63,9 @@ function versionAvif(done) {
 
 function javascript(done) {
     src('src/js/**/*.js')
+        .pipe( sourcemaps.init() )
+        .pipe( terser() )
+        .pipe( sourcemaps.write('.') )
         .pipe( dest('build/js') )
     done();
 }
